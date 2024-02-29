@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -51,9 +52,9 @@ public class DemoSpringDataJdbcApplication implements CommandLineRunner {
 
 //        String queryCountryName = "xxx";
         String queryCountryName = "france"; // en BDD : France
+//        String queryCountryName = "FR%"; // commence par...
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource(Map.of("name", queryCountryName));
 
-        // wrap list avec DataAccessUtils.singleResult() ?
         List<CountryDTO> list = namedParameterJdbcTemplate.query(sql, sqlParameterSource, beanRowMapper());
 
         log.info("Total rows = {}", list.size());
@@ -64,6 +65,9 @@ public class DemoSpringDataJdbcApplication implements CommandLineRunner {
                     list.get(0).getCode(),
                     list.get(0).getCode2());
         }
+
+        // wrap list avec DataAccessUtils.singleResult() ?
+        CountryDTO singleResult = DataAccessUtils.singleResult(list);
 
         log.info("Stop 🛑");
     }
