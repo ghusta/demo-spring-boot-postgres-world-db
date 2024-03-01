@@ -1,0 +1,45 @@
+= Demo project for Spring Boot with Postgresql sample database
+:toc:
+:toclevels: 3
+
+== Get started
+
+=== Start the sample database
+
+==== With Docker
+
+[source,bash]
+----
+docker run -d -p 5442:5432 --name pg-world-db ghusta/postgres-world-db:2.11
+----
+
+Run psql CLI commands :
+
+[source,bash]
+----
+docker exec -it pg-world-db psql -d world-db -U world
+----
+
+Then list the tables with psql :
+
+[source,bash]
+----
+world-db=# \d
+----
+
+Describe the `country` table :
+
+[source,bash]
+----
+world-db=# \d+ country
+----
+
+[TIP]
+====
+Find help here : https://github.com/ghusta/docker-postgres-world-db
+====
+
+==== I don't use Docker
+
+But why ?
+😱
