@@ -64,12 +64,23 @@ public class DemoSpringDataJdbcApplication implements CommandLineRunner {
                     list.get(0).getName(),
                     list.get(0).getCode(),
                     list.get(0).getCode2());
+
+            String emojiFlag = getFlagForCountry(namedParameterJdbcTemplate, list.get(0).getCode2());
+            log.info("First result's flag : {}", emojiFlag);
         }
 
         // wrap list avec DataAccessUtils.singleResult() ?
         CountryDTO singleResult = DataAccessUtils.singleResult(list);
 
         log.info("Stop 🛑");
+    }
+
+    public String getFlagForCountry(NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+                                    String code2) {
+        String sql = "select emoji from country_flag cf where cf.code2 = :code2 ";
+        return namedParameterJdbcTemplate.queryForObject(sql,
+                Map.of("code2", code2),
+                (rs, rowNum) -> rs.getString(1));
     }
 
     private static RowMapper<CountryDTO> beanRowMapper() {
