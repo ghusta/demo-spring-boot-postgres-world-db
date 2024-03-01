@@ -11,11 +11,11 @@
 	</parent>
 
 	<groupId>com.example</groupId>
-	<artifactId>demo-spring-data-jdbc</artifactId>
+	<artifactId>demo-spring-boot-postgres-world-db</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>demo-spring-data-jdbc</name>
-	<description>Demo project for Spring Boot</description>
+	<name>demo-spring-boot-postgres-world-db</name>
+	<description>Demo project for Spring Boot with Postgresql sample database</description>
 
 	<properties>
 		<java.version>21</java.version>
