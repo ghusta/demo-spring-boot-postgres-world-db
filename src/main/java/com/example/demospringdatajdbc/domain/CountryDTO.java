@@ -1,9 +1,14 @@
-package com.example.demospringdatajdbc;
+package com.example.demospringdatajdbc.domain;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigInteger;
 
+@Table(name = "country")
 public class CountryDTO {
 
+    @Id
     private String code;
     private String code2;
     private String name;

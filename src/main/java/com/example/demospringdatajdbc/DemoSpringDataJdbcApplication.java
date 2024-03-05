@@ -1,13 +1,13 @@
 package com.example.demospringdatajdbc;
 
+import com.example.demospringdatajdbc.dao.CountryRepository;
+import com.example.demospringdatajdbc.domain.CountryDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -31,12 +31,10 @@ public class DemoSpringDataJdbcApplication implements CommandLineRunner {
     private DataSource dataSource;
 
     @Autowired
-    private ApplicationContext context;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    @Bean
-    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
-        return new NamedParameterJdbcTemplate(dataSource);
-    }
+    @Autowired
+    private CountryRepository countryRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(DemoSpringDataJdbcApplication.class, args);
@@ -44,8 +42,6 @@ public class DemoSpringDataJdbcApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Assert.notNull(dataSource, "DataSource non null");
-        NamedParameterJdbcTemplate namedParameterJdbcTemplate = context.getBean(NamedParameterJdbcTemplate.class);
         log.info("Go 🏁");
 
         String sql = "select * from country c where c.name ilike :name ";
@@ -56,6 +52,10 @@ public class DemoSpringDataJdbcApplication implements CommandLineRunner {
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource(Map.of("name", queryCountryName));
 
         List<CountryDTO> list = namedParameterJdbcTemplate.query(sql, sqlParameterSource, beanRowMapper());
+
+        // same with Spring Data JDBC
+        // List<CountryDTO> list2 = countryRepository.findByNameLike(queryCountryName);
+        // Optional<CountryDTO> brazil = countryRepository.findByCode("BRA");
 
         log.info("Total rows = {}", list.size());
         Assert.notNull(list, "query() never returns null");
