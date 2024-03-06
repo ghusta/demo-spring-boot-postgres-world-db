@@ -4,10 +4,10 @@ import com.example.demospringdatajdbc.dao.CountryRepository;
 import com.example.demospringdatajdbc.domain.CountryDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,63 +16,55 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.util.Assert;
 
-import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 @SpringBootApplication
-public class DemoSpringDataJdbcApplication implements CommandLineRunner {
+public class DemoSpringDataJdbcApplication {
 
     private static final Logger log = LoggerFactory.getLogger(DemoSpringDataJdbcApplication.class);
-
-    @Autowired
-    private DataSource dataSource;
-
-    @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    @Autowired
-    private CountryRepository countryRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(DemoSpringDataJdbcApplication.class, args);
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        log.info("Go 🏁");
+    @Bean
+    ApplicationRunner demo(NamedParameterJdbcTemplate namedParameterJdbcTemplate, CountryRepository countryRepository) {
+        return args -> {
+            log.info("Go 🏁");
 
-        String sql = "select * from country c where c.name ilike :name ";
+            String sql = "select * from country c where c.name ilike :name ";
 
 //        String queryCountryName = "xxx";
-        String queryCountryName = "france"; // en BDD : France
+            String queryCountryName = "france"; // en BDD : France
 //        String queryCountryName = "FR%"; // commence par...
-        SqlParameterSource sqlParameterSource = new MapSqlParameterSource(Map.of("name", queryCountryName));
+            SqlParameterSource sqlParameterSource = new MapSqlParameterSource(Map.of("name", queryCountryName));
 
-        List<CountryDTO> list = namedParameterJdbcTemplate.query(sql, sqlParameterSource, beanRowMapper());
+            List<CountryDTO> list = namedParameterJdbcTemplate.query(sql, sqlParameterSource, beanRowMapper());
 
-        // same with Spring Data JDBC
-        // List<CountryDTO> list2 = countryRepository.findByNameLike(queryCountryName);
-        // Optional<CountryDTO> brazil = countryRepository.findByCode("BRA");
+            // same with Spring Data JDBC
+            // List<CountryDTO> list2 = countryRepository.findByNameLike(queryCountryName);
+            // Optional<CountryDTO> brazil = countryRepository.findByCode("BRA");
 
-        log.info("Total rows = {}", list.size());
-        Assert.notNull(list, "query() never returns null");
-        if (!list.isEmpty()) {
-            log.info("First result : {} - {} - {}",
-                    list.get(0).getName(),
-                    list.get(0).getCode(),
-                    list.get(0).getCode2());
+            log.info("Total rows = {}", list.size());
+            Assert.notNull(list, "query() never returns null");
+            if (!list.isEmpty()) {
+                log.info("First result : {} - {} - {}",
+                        list.get(0).getName(),
+                        list.get(0).getCode(),
+                        list.get(0).getCode2());
 
-            String emojiFlag = getFlagForCountry(namedParameterJdbcTemplate, list.get(0).getCode2());
-            log.info("First result's flag : {}", emojiFlag);
-        }
+                String emojiFlag = getFlagForCountry(namedParameterJdbcTemplate, list.get(0).getCode2());
+                log.info("First result's flag : {}", emojiFlag);
+            }
 
-        // wrap list avec DataAccessUtils.singleResult() ?
-        CountryDTO singleResult = DataAccessUtils.singleResult(list);
+            // wrap list avec DataAccessUtils.singleResult() ?
+            CountryDTO singleResult = DataAccessUtils.singleResult(list);
 
-        log.info("Stop 🛑");
+            log.info("Stop 🛑");
+        };
     }
 
     public String getFlagForCountry(NamedParameterJdbcTemplate namedParameterJdbcTemplate,
