@@ -2,12 +2,15 @@ package com.example.demospringdatajdbc.dao;
 
 import com.example.demospringdatajdbc.domain.CountryDTO;
 import org.springframework.data.jdbc.repository.query.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface CountryRepository extends CrudRepository<CountryDTO, String> {
+/**
+ * {@link ListCrudRepository} extends {@link org.springframework.data.repository.CrudRepository}.
+ */
+public interface CountryRepository extends ListCrudRepository<CountryDTO, String> {
 
     Optional<CountryDTO> findByCode(String code);
 
