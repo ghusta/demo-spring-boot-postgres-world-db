@@ -1,7 +1,7 @@
 package com.example.demospringdatajdbc;
 
-import com.example.demospringdatajdbc.dao.CountryRepository;
-import com.example.demospringdatajdbc.domain.CountryDTO;
+import com.example.demospringdatajdbc.country.CountryRepository;
+import com.example.demospringdatajdbc.country.CountryDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationRunner;

@@ -1,6 +1,5 @@
-package com.example.demospringdatajdbc.dao;
+package com.example.demospringdatajdbc.country;
 
-import com.example.demospringdatajdbc.domain.CountryDTO;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 

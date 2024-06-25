@@ -1,4 +1,4 @@
-package com.example.demospringdatajdbc.domain;
+package com.example.demospringdatajdbc.country;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;

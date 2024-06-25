@@ -1,7 +1,7 @@
 package com.example.demospringdatajdbc;
 
-import com.example.demospringdatajdbc.dao.CountryRepository;
-import com.example.demospringdatajdbc.domain.CountryDTO;
+import com.example.demospringdatajdbc.country.CountryRepository;
+import com.example.demospringdatajdbc.country.CountryDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
