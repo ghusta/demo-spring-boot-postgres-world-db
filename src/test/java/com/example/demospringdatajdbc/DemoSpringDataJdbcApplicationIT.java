@@ -1,8 +1,11 @@
 package com.example.demospringdatajdbc;
 
 import com.example.demospringdatajdbc.country.Country;
+import com.example.demospringdatajdbc.country.CountryDTO;
 import com.example.demospringdatajdbc.country.CountryLightDTO;
 import com.example.demospringdatajdbc.country.CountryRepository;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @SpringBootTest
 @Testcontainers
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class DemoSpringDataJdbcApplicationIT {
 
     @Container
@@ -57,4 +61,14 @@ class DemoSpringDataJdbcApplicationIT {
         assertThat(fra.get(0).name()).isEqualTo("France");
     }
 
+    @Test
+    void testQuery_findByContinent() {
+        List<CountryDTO> byContinent = countryRepository.findByContinent("Asia");
+        assertThat(byContinent).hasSizeGreaterThan(10);
+
+        CountryDTO first = byContinent.getFirst();
+        System.out.println("First = " + first);
+        CountryDTO last = byContinent.getLast();
+        System.out.println("Last = " + last);
+    }
 }
