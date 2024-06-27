@@ -14,7 +14,7 @@ public class CountryService {
         this.countryRepository = countryRepository;
     }
 
-    public List<CountryDTO> findByNameLike(String name) {
+    public List<Country> findByNameLike(String name) {
         return countryRepository.findByNameLike(name);
     }
 

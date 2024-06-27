@@ -1,7 +1,8 @@
 package com.example.demospringdatajdbc;
 
+import com.example.demospringdatajdbc.country.Country;
+import com.example.demospringdatajdbc.country.CountryLightDTO;
 import com.example.demospringdatajdbc.country.CountryRepository;
-import com.example.demospringdatajdbc.country.CountryDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationRunner;
@@ -20,6 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @SpringBootApplication
 public class DemoSpringDataJdbcApplication {
@@ -28,6 +30,18 @@ public class DemoSpringDataJdbcApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DemoSpringDataJdbcApplication.class, args);
+    }
+
+    private static RowMapper<Country> beanRowMapper() {
+        return new BeanPropertyRowMapper<>(Country.class);
+    }
+
+    private static Country mapRowSimple(ResultSet rs, int rowNum) throws SQLException {
+        String cName = rs.getString("name");
+        log.info("Found row #{} ! ['{}']", rowNum, cName);
+        Country country = new Country();
+        country.setName(cName);
+        return country;
     }
 
     @Bean
@@ -42,11 +56,12 @@ public class DemoSpringDataJdbcApplication {
 //        String queryCountryName = "FR%"; // commence par...
             SqlParameterSource sqlParameterSource = new MapSqlParameterSource(Map.of("name", queryCountryName));
 
-            List<CountryDTO> list = namedParameterJdbcTemplate.query(sql, sqlParameterSource, beanRowMapper());
+            List<Country> list = namedParameterJdbcTemplate.query(sql, sqlParameterSource, beanRowMapper());
 
             // same with Spring Data JDBC
-            // List<CountryDTO> list2 = countryRepository.findByNameLike(queryCountryName);
-            // Optional<CountryDTO> brazil = countryRepository.findByCode("BRA");
+            List<Country> list2 = countryRepository.findByNameLike(queryCountryName);
+            List<CountryLightDTO> list3 = countryRepository.findByNameLikeDTO(queryCountryName);
+            Optional<Country> brazil = countryRepository.findByCode("BRA");
 
             log.info("Total rows = {}", list.size());
             Assert.notNull(list, "query() never returns null");
@@ -61,7 +76,7 @@ public class DemoSpringDataJdbcApplication {
             }
 
             // wrap list avec DataAccessUtils.singleResult() ?
-            CountryDTO singleResult = DataAccessUtils.singleResult(list);
+            Country singleResult = DataAccessUtils.singleResult(list);
 
             log.info("Stop 🛑");
         };
@@ -73,17 +88,5 @@ public class DemoSpringDataJdbcApplication {
         return namedParameterJdbcTemplate.queryForObject(sql,
                 Map.of("code2", code2),
                 (rs, rowNum) -> rs.getString(1));
-    }
-
-    private static RowMapper<CountryDTO> beanRowMapper() {
-        return new BeanPropertyRowMapper<>(CountryDTO.class);
-    }
-
-    private static CountryDTO mapRowSimple(ResultSet rs, int rowNum) throws SQLException {
-        String cName = rs.getString("name");
-        log.info("Found row #{} ! ['{}']", rowNum, cName);
-        CountryDTO countryDTO = new CountryDTO();
-        countryDTO.setName(cName);
-        return countryDTO;
     }
 }
