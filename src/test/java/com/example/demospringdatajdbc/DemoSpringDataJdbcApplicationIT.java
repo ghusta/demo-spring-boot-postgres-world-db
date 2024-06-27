@@ -1,7 +1,8 @@
 package com.example.demospringdatajdbc;
 
+import com.example.demospringdatajdbc.country.Country;
+import com.example.demospringdatajdbc.country.CountryLightDTO;
 import com.example.demospringdatajdbc.country.CountryRepository;
-import com.example.demospringdatajdbc.country.CountryDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +14,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,6 +31,10 @@ class DemoSpringDataJdbcApplicationIT {
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(DockerImageName.parse("ghusta/postgres-world-db:2.11")
             .asCompatibleSubstituteFor("postgres"));
+    @Autowired
+    private DataSource dataSource;
+    @Autowired
+    private CountryRepository countryRepository;
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
@@ -37,17 +43,18 @@ class DemoSpringDataJdbcApplicationIT {
         registry.add("spring.datasource.password", postgres::getPassword);
     }
 
-    @Autowired
-    private DataSource dataSource;
-
-    @Autowired
-    private CountryRepository countryRepository;
-
     @Test
     void testQueryCountryByCode() {
-        Optional<CountryDTO> swe = countryRepository.findByCode("SWE");
+        Optional<Country> swe = countryRepository.findByCode("SWE");
         assertThat(swe).isNotEmpty();
         assertThat(swe.get().getName()).isEqualTo("Sweden");
+    }
+
+    @Test
+    void testQueryCountryLightDTOByName() {
+        List<CountryLightDTO> fra = countryRepository.findByNameLikeDTO("france");
+        assertThat(fra).isNotEmpty();
+        assertThat(fra.get(0).name()).isEqualTo("France");
     }
 
 }
