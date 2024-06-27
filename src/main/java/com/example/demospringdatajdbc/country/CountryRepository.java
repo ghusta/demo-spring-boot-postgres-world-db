@@ -21,6 +21,6 @@ public interface CountryRepository extends JpaRepository<Country, String> {
     @Query("SELECT new com.example.demospringdatajdbc.country.CountryLightDTO(c.code, c.code2, c.name) FROM country c WHERE c.name ILIKE :name ")
     List<CountryLightDTO> findByNameLikeDTO(String name);
 
-    List<Country> findByContinent(String continent);
+    List<CountryDTO> findByContinent(String continent);
 
 }
