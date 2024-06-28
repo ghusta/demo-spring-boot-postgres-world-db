@@ -78,4 +78,11 @@ class DemoSpringDataJdbcApplicationIT {
         assertThat(countryDTO).isPresent();
         System.out.println(countryDTO.get());
     }
+
+    @Test
+    void testQuery_findTop3PopulationInEurope() {
+        List<CountryDTO> top3 = countryRepository.findTop3ByContinentOrderByPopulationDesc("Europe");
+        assertThat(top3).isNotEmpty();
+        top3.forEach(System.out::println);
+    }
 }

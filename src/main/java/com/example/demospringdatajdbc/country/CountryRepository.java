@@ -25,4 +25,6 @@ public interface CountryRepository extends JpaRepository<Country, String> {
 
     Optional<CountryDTO> findFirstByContinentOrderByPopulationDesc(String continent);
 
+    List<CountryDTO> findTop3ByContinentOrderByPopulationDesc(String continent);
+
 }
