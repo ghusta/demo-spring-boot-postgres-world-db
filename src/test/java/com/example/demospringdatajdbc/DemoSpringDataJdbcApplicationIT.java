@@ -48,14 +48,14 @@ class DemoSpringDataJdbcApplicationIT {
     }
 
     @Test
-    void testQueryCountryByCode() {
+    void testQuery_countryByCode() {
         Optional<Country> swe = countryRepository.findByCode("SWE");
         assertThat(swe).isNotEmpty();
         assertThat(swe.get().getName()).isEqualTo("Sweden");
     }
 
     @Test
-    void testQueryCountryLightDTOByName() {
+    void testQuery_countryLightDTOByNameLike() {
         List<CountryLightDTO> fra = countryRepository.findByNameLikeDTO("france");
         assertThat(fra).isNotEmpty();
         assertThat(fra.get(0).name()).isEqualTo("France");
