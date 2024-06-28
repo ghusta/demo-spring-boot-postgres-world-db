@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Limit;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -84,5 +85,11 @@ class DemoSpringDataJdbcApplicationIT {
         List<CountryDTO> top3 = countryRepository.findTop3ByContinentOrderByPopulationDesc("Europe");
         assertThat(top3).isNotEmpty();
         top3.forEach(System.out::println);
+    }
+
+    @Test
+    void testQuery_findByNameIgnoringCaseLike() {
+        List<Country> countries = countryRepository.findByNameIgnoringCaseLike("I%ELAND", Limit.of(10));
+        assertThat(countries).hasSize(2);
     }
 }
