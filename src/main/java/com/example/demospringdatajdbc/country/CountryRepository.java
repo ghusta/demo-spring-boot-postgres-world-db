@@ -1,5 +1,6 @@
 package com.example.demospringdatajdbc.country;
 
+import org.springframework.data.domain.Limit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
@@ -11,6 +12,10 @@ import java.util.Optional;
  * {@link ListCrudRepository} extends {@link org.springframework.data.repository.CrudRepository}.
  */
 public interface CountryRepository extends JpaRepository<Country, String> {
+
+    List<Country> findByName(String name, Limit limit);
+
+    List<Country> findByNameIgnoringCaseLike(String name, Limit limit);
 
     Optional<Country> findByCode(String code);
 
