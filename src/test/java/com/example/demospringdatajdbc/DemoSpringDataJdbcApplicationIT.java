@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * <p>
  * See : <a href="https://github.com/testcontainers/testcontainers-java-spring-boot-quickstart/blob/main/README.md">testcontainers-java-spring-boot-quickstart</a>
  */
-@SpringBootTest
+@SpringBootTest(properties = {"spring.jpa.show-sql=true"})
 @Testcontainers
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class DemoSpringDataJdbcApplicationIT {
