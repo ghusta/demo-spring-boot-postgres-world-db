@@ -71,4 +71,11 @@ class DemoSpringDataJdbcApplicationIT {
         CountryDTO last = byContinent.getLast();
         System.out.println("Last = " + last);
     }
+
+    @Test
+    void testQuery_findMaxPopulationInAsia() {
+        Optional<CountryDTO> countryDTO = countryRepository.findFirstByContinentOrderByPopulationDesc("Asia");
+        assertThat(countryDTO).isPresent();
+        System.out.println(countryDTO.get());
+    }
 }
