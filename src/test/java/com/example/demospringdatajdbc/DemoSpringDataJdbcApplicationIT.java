@@ -34,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DemoSpringDataJdbcApplicationIT {
 
     @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(DockerImageName.parse("ghusta/postgres-world-db:2.11")
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(DockerImageName.parse("ghusta/postgres-world-db:2.12")
             .asCompatibleSubstituteFor("postgres"));
     @Autowired
     private DataSource dataSource;
